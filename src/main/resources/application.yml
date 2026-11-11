@@ -19,3 +19,8 @@ spring:
     console:
       enabled: true
       path: /h2-console
+
+visit:
+  compliance:
+    min-duration-seconds: 300
+    max-hospital-distance-meters: 500.0
