@@ -10,20 +10,23 @@ import java.util.Locale;
 
 /**
  * Presentation-only helpers, invoked from Thymeleaf via {@code @beanName}.
+ *
+ * <p>All timestamps are rendered in the configured app zone ({@code visit.time-zone}),
+ * defaulting to UTC+8.</p>
  */
 public final class DisplayFormats {
 
-    private static final DateTimeFormatter DATE_TIME =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ROOT).withZone(ZoneId.systemDefault());
+    private final DateTimeFormatter dateTime;
 
-    public DisplayFormats() {
+    public DisplayFormats(ZoneId zone) {
+        this.dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm", Locale.ROOT).withZone(zone);
     }
 
-    public static String dateTime(Instant instant) {
-        return instant == null ? "—" : DATE_TIME.format(instant);
+    public String dateTime(Instant instant) {
+        return instant == null ? "—" : dateTime.format(instant);
     }
 
-    public static String statusLabel(VisitStatus status) {
+    public String statusLabel(VisitStatus status) {
         return switch (status) {
             case PLANNED -> "Planned";
             case CHECKED_IN -> "Checked in";
@@ -32,14 +35,14 @@ public final class DisplayFormats {
         };
     }
 
-    public static String reasonLabel(AbnormalReason reason) {
+    public String reasonLabel(AbnormalReason reason) {
         return switch (reason) {
             case SHORT_DURATION -> "Less than 5 minutes at the hospital";
             case FAR_FROM_HOSPITAL -> "More than 500 m from the hospital";
         };
     }
 
-    public static String duration(Long seconds) {
+    public String duration(Long seconds) {
         if (seconds == null) {
             return "—";
         }

@@ -24,3 +24,5 @@ visit:
   compliance:
     min-duration-seconds: 300
     max-hospital-distance-meters: 500.0
+  # Zone used for month bucketing and displaying timestamps (UTC+8).
+  time-zone: Asia/Shanghai

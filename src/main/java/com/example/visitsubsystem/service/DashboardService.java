@@ -17,14 +17,15 @@ import java.util.List;
 public class DashboardService {
 
     private final VisitRepository visitRepository;
+    private final ZoneId zone;
 
-    public DashboardService(VisitRepository visitRepository) {
+    public DashboardService(VisitRepository visitRepository, ZoneId zone) {
         this.visitRepository = visitRepository;
+        this.zone = zone;
     }
 
     public DashboardData monthly(int year, int month, VisitStatus statusFilter) {
         YearMonth yearMonth = YearMonth.of(year, month);
-        ZoneId zone = ZoneId.systemDefault();
         Instant from = yearMonth.atDay(1).atStartOfDay(zone).toInstant();
         Instant to = yearMonth.plusMonths(1).atDay(1).atStartOfDay(zone).toInstant();
 

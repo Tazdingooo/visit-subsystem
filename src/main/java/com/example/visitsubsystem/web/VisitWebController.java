@@ -29,13 +29,16 @@ public class VisitWebController {
     private final VisitService visitService;
     private final HcpRepository hcpRepository;
     private final ProductRepository productRepository;
+    private final ZoneId zone;
 
     public VisitWebController(VisitService visitService,
                               HcpRepository hcpRepository,
-                              ProductRepository productRepository) {
+                              ProductRepository productRepository,
+                              ZoneId zone) {
         this.visitService = visitService;
         this.hcpRepository = hcpRepository;
         this.productRepository = productRepository;
+        this.zone = zone;
     }
 
     @GetMapping("/visits")
@@ -62,7 +65,7 @@ public class VisitWebController {
         if (form.getPlannedAtLocal() != null && !form.getPlannedAtLocal().isBlank()) {
             try {
                 plannedAt = LocalDateTime.parse(form.getPlannedAtLocal())
-                        .atZone(ZoneId.systemDefault())
+                        .atZone(zone)
                         .toInstant();
             } catch (DateTimeParseException ex) {
                 binding.rejectValue("plannedAtLocal", "invalid", "Enter a valid date and time");

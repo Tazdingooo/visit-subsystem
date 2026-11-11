@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Transactional
 class DashboardServiceIntegrationTest {
 
-    private static final ZoneId ZONE = ZoneId.systemDefault();
+    private static final ZoneId ZONE = ZoneId.of("Asia/Shanghai");
 
     @Autowired
     private DashboardService dashboardService;
