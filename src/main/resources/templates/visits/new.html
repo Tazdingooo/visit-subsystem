@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Plan a visit')}"></head>
+<body>
+<header th:replace="~{fragments :: topbar}"></header>
+<main>
+    <h1>Plan a visit</h1>
+
+    <div th:replace="~{fragments :: flash}"></div>
+
+    <div class="card">
+        <form class="stack" method="post" th:action="@{/visits}" th:object="${form}">
+
+            <label class="field">HCP
+                <select th:field="*{hcpId}">
+                    <option value="">Select an HCP…</option>
+                    <option th:each="h : ${hcps}"
+                            th:value="${h.id}"
+                            th:text="${h.name + ' · ' + h.hospital.name}">HCP</option>
+                </select>
+            </label>
+            <ul class="errors" th:if="${#fields.hasErrors('hcpId')}">
+                <li th:each="e : ${#fields.errors('hcpId')}" th:text="${e}"></li>
+            </ul>
+
+            <label class="field">Product
+                <select th:field="*{productId}">
+                    <option value="">Select a product…</option>
+                    <option th:each="p : ${products}"
+                            th:value="${p.id}"
+                            th:text="${p.name}">Product</option>
+                </select>
+            </label>
+            <ul class="errors" th:if="${#fields.hasErrors('productId')}">
+                <li th:each="e : ${#fields.errors('productId')}" th:text="${e}"></li>
+            </ul>
+
+            <label class="field">Department
+                <input type="text" th:field="*{departmentName}" placeholder="e.g. Cardiology" autocomplete="off">
+            </label>
+            <ul class="errors" th:if="${#fields.hasErrors('departmentName')}">
+                <li th:each="e : ${#fields.errors('departmentName')}" th:text="${e}"></li>
+            </ul>
+
+            <label class="field">Planned time
+                <input type="datetime-local" th:field="*{plannedAtLocal}">
+            </label>
+            <ul class="errors" th:if="${#fields.hasErrors('plannedAtLocal')}">
+                <li th:each="e : ${#fields.errors('plannedAtLocal')}" th:text="${e}"></li>
+            </ul>
+
+            <div class="actions">
+                <button type="submit">Save plan</button>
+                <a class="button secondary" th:href="@{/visits}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>

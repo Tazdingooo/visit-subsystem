@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Not found')}"></head>
+<body>
+<header th:replace="~{fragments :: topbar}"></header>
+<main>
+    <div class="card">
+        <h1>Page not found</h1>
+        <div class="alert error" th:if="${error}" th:text="${error}"></div>
+        <p class="empty">The page or record you asked for does not exist.</p>
+        <a class="button" th:href="@{/visits}">Back to visits</a>
+    </div>
+</main>
+</body>
+</html>

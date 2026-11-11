@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Visit')}"></head>
+<body>
+<header th:replace="~{fragments :: topbar}"></header>
+<main>
+    <h1 th:text="${'Visit #' + v.id}">Visit</h1>
+
+    <div th:replace="~{fragments :: flash}"></div>
+    <div class="alert success" th:if="${message}" th:text="${message}"></div>
+
+    <div class="card">
+        <span class="badge" th:classappend="' ' + ${#strings.toLowerCase(#strings.replace(v.status.name(),'_','-'))}"
+              th:text="${@displayFormats.statusLabel(v.status)}">Planned</span>
+
+        <dl class="meta" style="margin-top:0.85rem">
+            <dt>HCP</dt>
+            <dd th:text="${v.hcpName + ' · ' + v.hospitalName}">HCP</dd>
+            <dt>Product</dt>
+            <dd th:text="${v.productName}">Product</dd>
+            <dt>Department</dt>
+            <dd th:text="${v.departmentName}">Department</dd>
+            <dt>Planned</dt>
+            <dd th:text="${@displayFormats.dateTime(v.plannedAt)}">—</dd>
+            <dt>Checked in</dt>
+            <dd th:text="${@displayFormats.dateTime(v.checkInAt)}">—</dd>
+            <dt>Checked out</dt>
+            <dd th:text="${@displayFormats.dateTime(v.checkOutAt)}">—</dd>
+            <dt>Duration</dt>
+            <dd th:text="${@displayFormats.duration(v.durationSeconds)}">—</dd>
+        </dl>
+    </div>
+
+    <div class="card" th:if="${v.complianceFlag != null}">
+        <h2>Compliance</h2>
+        <span class="badge" th:classappend="' ' + ${#strings.toLowerCase(v.complianceFlag.name())}"
+              th:text="${v.complianceFlag.name()}">OK</span>
+        <ul th:if="${!v.abnormalReasons.isEmpty()}" style="margin:0.6rem 0 0;padding-left:1.1rem">
+            <li th:each="r : ${v.abnormalReasons}" th:text="${@displayFormats.reasonLabel(r)}">Reason</li>
+        </ul>
+    </div>
+
+    <div class="card" th:if="${v.report != null}">
+        <h2>Call report</h2>
+        <dl class="meta">
+            <dt>Talking points</dt>
+            <dd th:text="${v.report.talkingPoints != null ? v.report.talkingPoints : '—'}">—</dd>
+            <dt>Feedback</dt>
+            <dd th:text="${v.report.feedback != null ? v.report.feedback : '—'}">—</dd>
+            <dt>Materials distributed</dt>
+            <dd th:text="${v.report.materialsDistributed ? 'Yes' : 'No'}">No</dd>
+        </dl>
+    </div>
+
+    <div class="card" th:if="${v.status.name() == 'PLANNED'}">
+        <h2>Check in</h2>
+        <form class="stack" method="post" th:action="@{'/visits/' + ${v.id} + '/check-in'}" th:object="${gpsForm}">
+            <p class="empty" style="margin:0">
+                GPS is typed in to simulate capture from the mobile device.
+            </p>
+            <label class="field">Latitude
+                <input type="number" step="any" min="-90" max="90" th:field="*{lat}">
+                <span class="hint" th:text="${'Hospital: ' + v.hospitalLat}"></span>
+            </label>
+            <label class="field">Longitude
+                <input type="number" step="any" min="-180" max="180" th:field="*{lng}">
+                <span class="hint" th:text="${'Hospital: ' + v.hospitalLng}"></span>
+            </label>
+            <div class="actions">
+                <button type="submit">Check in</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card" th:if="${v.status.name() == 'CHECKED_IN'}">
+        <h2>Check out</h2>
+        <form class="stack" method="post" th:action="@{'/visits/' + ${v.id} + '/check-out'}" th:object="${gpsForm}">
+            <p class="empty" style="margin:0">
+                GPS is typed in to simulate capture from the mobile device.
+            </p>
+            <label class="field">Latitude
+                <input type="number" step="any" min="-90" max="90" th:field="*{lat}">
+                <span class="hint" th:text="${'Hospital: ' + v.hospitalLat}"></span>
+            </label>
+            <label class="field">Longitude
+                <input type="number" step="any" min="-180" max="180" th:field="*{lng}">
+                <span class="hint" th:text="${'Hospital: ' + v.hospitalLng}"></span>
+            </label>
+            <div class="actions">
+                <button type="submit">Check out</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card" th:if="${v.status.name() == 'CHECKED_OUT'}">
+        <h2>Call report</h2>
+        <form class="stack" method="post" th:action="@{'/visits/' + ${v.id} + '/report'}" th:object="${reportForm}">
+            <label class="field">Talking points
+                <textarea th:field="*{talkingPoints}"></textarea>
+            </label>
+            <label class="field">Feedback
+                <textarea th:field="*{feedback}"></textarea>
+            </label>
+            <label class="field" style="grid-auto-flow: column;justify-content:start;gap:0.5rem;align-items:center">
+                <input type="checkbox" th:field="*{materialsDistributed}" style="width:auto">
+                Materials distributed
+            </label>
+            <div class="actions">
+                <button type="submit">Save report</button>
+            </div>
+        </form>
+    </div>
+
+    <a class="button secondary" th:href="@{/visits}">Back to visits</a>
+</main>
+</body>
+</html>

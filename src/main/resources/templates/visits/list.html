@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Visits')}"></head>
+<body>
+<header th:replace="~{fragments :: topbar}"></header>
+<main>
+    <h1>Visits</h1>
+
+    <div th:replace="~{fragments :: flash}"></div>
+
+    <div class="card">
+        <div th:if="${#lists.isEmpty(visits)}" class="empty">
+            No visits planned yet. <a th:href="@{/visits/new}">Plan the first visit</a>.
+        </div>
+
+        <table th:unless="${#lists.isEmpty(visits)}">
+            <thead>
+            <tr>
+                <th>Planned</th>
+                <th>HCP</th>
+                <th>Hospital</th>
+                <th>Product</th>
+                <th>Department</th>
+                <th>Status</th>
+                <th>Compliance</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="v : ${visits}">
+                <td th:text="${@displayFormats.dateTime(v.plannedAt)}">—</td>
+                <td th:text="${v.hcpName}">HCP</td>
+                <td th:text="${v.hospitalName}">Hospital</td>
+                <td th:text="${v.productName}">Product</td>
+                <td th:text="${v.departmentName}">Department</td>
+                <td>
+                    <span class="badge" th:classappend="' ' + ${#strings.toLowerCase(#strings.replace(v.status.name(),'_','-'))}"
+                          th:text="${@displayFormats.statusLabel(v.status)}">Planned</span>
+                </td>
+                <td>
+                    <span th:if="${v.complianceFlag != null}" class="badge"
+                          th:classappend="' ' + ${#strings.toLowerCase(v.complianceFlag.name())}"
+                          th:text="${v.complianceFlag.name()}">OK</span>
+                    <span th:if="${v.complianceFlag == null}">—</span>
+                </td>
+                <td><a th:href="@{'/visits/' + ${v.id}}">Open</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <a class="button" th:href="@{/visits/new}">Plan a visit</a>
+</main>
+</body>
+</html>

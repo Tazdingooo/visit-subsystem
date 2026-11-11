@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' · MR Visits'">MR Visits</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<header class="topbar" th:fragment="topbar">
+    <a class="brand" th:href="@{/}">MR Visits</a>
+    <nav>
+        <a th:href="@{/}">Dashboard</a>
+        <a th:href="@{/visits}">Visits</a>
+        <a th:href="@{/visits/new}">Plan a visit</a>
+    </nav>
+</header>
+
+<div th:fragment="flash" th:if="${error}" class="alert error" th:text="${error}"></div>
+
+<div th:fragment="badge(status)" class="badge" th:classappend="' ' + ${#strings.toLowerCase(#strings.replace(status,'_','-'))}"
+     th:text="${status}">PLANNED</div>
+
+</body>
+</html>

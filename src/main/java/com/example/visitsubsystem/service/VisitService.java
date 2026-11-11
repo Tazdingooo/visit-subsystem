@@ -125,6 +125,55 @@ public class VisitService {
         return requireVisit(visitId);
     }
 
+    @Transactional(readOnly = true)
+    public java.util.List<VisitSummary> listVisits() {
+        return visitRepository.findAllByOrderByPlannedAtDesc().stream()
+                .map(this::toSummary)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public VisitDetail getVisitDetail(long visitId) {
+        Visit visit = requireVisit(visitId);
+        VisitDetail.CallReportView report = callReportRepository.findByVisitId(visitId)
+                .map(r -> new VisitDetail.CallReportView(r.getTalkingPoints(), r.getFeedback(), r.isMaterialsDistributed()))
+                .orElse(null);
+        var hcp = visit.getHcp();
+        var hospital = hcp.getHospital();
+        return new VisitDetail(
+                visit.getId(),
+                hcp.getName(),
+                hospital.getName(),
+                hospital.getLat(),
+                hospital.getLng(),
+                visit.getProduct().getName(),
+                visit.getDepartmentName(),
+                visit.getPlannedAt(),
+                visit.getCheckInAt(),
+                visit.getCheckInLat(),
+                visit.getCheckInLng(),
+                visit.getCheckOutAt(),
+                visit.getCheckOutLat(),
+                visit.getCheckOutLng(),
+                visit.getDurationSeconds(),
+                visit.getStatus(),
+                visit.getComplianceFlag(),
+                java.util.Set.copyOf(visit.getAbnormalReasons()),
+                report);
+    }
+
+    private VisitSummary toSummary(Visit visit) {
+        return new VisitSummary(
+                visit.getId(),
+                visit.getHcp().getName(),
+                visit.getHcp().getHospital().getName(),
+                visit.getProduct().getName(),
+                visit.getDepartmentName(),
+                visit.getPlannedAt(),
+                visit.getStatus(),
+                visit.getComplianceFlag());
+    }
+
     private Visit requireVisit(long visitId) {
         return visitRepository.findById(visitId)
                 .orElseThrow(() -> new VisitNotFoundException("No visit with id " + visitId));
