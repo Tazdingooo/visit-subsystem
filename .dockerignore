@@ -1,0 +1,9 @@
+target/
+data/
+.mvn/wrapper/maven-wrapper.jar
+.idea/
+*.iml
+.DS_Store
+.git/
+Dockerfile
+docker-compose.yaml

@@ -1,0 +1,19 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: visit-subsystem:latest
+    container_name: visit-subsystem
+    ports:
+      - "8080:8080"
+    environment:
+      # Activates application-docker.yml: absolute H2 path, H2 console off.
+      SPRING_PROFILES_ACTIVE: docker
+    volumes:
+      # Persist the embedded H2 database across container restarts.
+      - visit-subsystem-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  visit-subsystem-data:
