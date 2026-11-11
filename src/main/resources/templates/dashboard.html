@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Monthly dashboard')}"></head>
+<body>
+<header th:replace="~{fragments :: topbar}"></header>
+<main>
+    <h1>Monthly dashboard</h1>
+
+    <div class="card">
+        <form class="inline-form" method="get" th:action="@{/}">
+            <label class="field">Month
+                <input type="month" name="monthValue" th:value="${current}" onchange="splitMonth(this)">
+            </label>
+            <input id="year" type="hidden" name="year" th:value="${data.year}">
+            <input id="month" type="hidden" name="month" th:value="${data.month}">
+            <label class="field">Status
+                <select name="status">
+                    <option value="">All statuses</option>
+                    <option th:each="s : ${statuses}" th:value="${s.name()}" th:selected="${s == data.statusFilter}"
+                            th:text="${@displayFormats.statusLabel(s)}">Planned</option>
+                </select>
+            </label>
+            <button type="submit">Apply</button>
+        </form>
+        <div class="actions" style="margin-top:0.8rem">
+            <a class="button secondary" th:href="@{/(year=${prev.year},month=${prev.month},status=${data.statusFilter})}">Previous month</a>
+            <a class="button secondary" th:href="@{/(year=${next.year},month=${next.month},status=${data.statusFilter})}">Next month</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 th:text="${current + ' · ' + data.totalVisits + ' visit(s)'}">Month · 0 visits</h2>
+        <div th:if="${#lists.isEmpty(data.productCounts)}" class="empty">
+            No planned visits match this month and filter.
+        </div>
+        <table th:unless="${#lists.isEmpty(data.productCounts)}">
+            <thead><tr><th>Product</th><th>Visits</th></tr></thead>
+            <tbody>
+            <tr th:each="p : ${data.productCounts}">
+                <td th:text="${p.productName}">Product</td>
+                <td th:text="${p.visits}">0</td>
+            </tr>
+            </tbody>
+        </table>
+        <canvas id="productChart" height="100" th:unless="${#lists.isEmpty(data.productCounts)}"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>Status breakdown for the month</h2>
+        <div th:if="${#lists.isEmpty(data.statusCounts)}" class="empty">No visits in this month.</div>
+        <table th:unless="${#lists.isEmpty(data.statusCounts)}">
+            <thead><tr><th>Status</th><th>Visits</th></tr></thead>
+            <tbody>
+            <tr th:each="s : ${data.statusCounts}">
+                <td th:text="${@displayFormats.statusLabel(s.status)}">Planned</td>
+                <td th:text="${s.visits}">0</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script th:src="@{/vendor/chart.umd.js}"></script>
+    <script th:inline="javascript">
+        const productLabels = /*[[${data.productCounts.![productName]}]]*/ [];
+        const productValues = /*[[${data.productCounts.![visits]}]]*/ [];
+        if (productLabels.length && typeof Chart !== 'undefined') {
+            new Chart(document.getElementById('productChart'), {
+                type: 'bar',
+                data: {
+                    labels: productLabels,
+                    datasets: [{
+                        label: 'Planned visits',
+                        data: productValues,
+                        backgroundColor: '#2557d6'
+                    }]
+                },
+                options: {
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function splitMonth(input) {
+            if (!input.value) return;
+            const parts = input.value.split('-');
+            document.getElementById('year').value = parts[0];
+            document.getElementById('month').value = Number(parts[1]);
+        }
+    </script>
+</main>
+</body>
+</html>
