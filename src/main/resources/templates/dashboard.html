@@ -23,8 +23,8 @@
             <button type="submit">Apply</button>
         </form>
         <div class="actions" style="margin-top:0.8rem">
-            <a class="button secondary" th:href="@{/(year=${prev.year},month=${prev.month},status=${data.statusFilter})}">Previous month</a>
-            <a class="button secondary" th:href="@{/(year=${next.year},month=${next.month},status=${data.statusFilter})}">Next month</a>
+            <a class="button secondary" th:href="@{/(year=${prev.year},month=${prev.monthValue},status=${data.statusFilter})}">Previous month</a>
+            <a class="button secondary" th:href="@{/(year=${next.year},month=${next.monthValue},status=${data.statusFilter})}">Next month</a>
         </div>
     </div>
 

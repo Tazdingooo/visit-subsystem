@@ -75,6 +75,21 @@ class WebAndApiSmokeTest {
     }
 
     @Test
+    void dashboardMonthNavigationLinksUseNumericMonth() throws Exception {
+        // January 2026: previous link must be 2025-12, next must be 2026-02,
+        // never Month enum names like "DECEMBER"/"FEBRUARY".
+        mockMvc.perform(get("/").param("year", "2026").param("month", "1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("year=2025")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("month=12")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("month=2")))
+                .andExpect(content().string(org.hamcrest.Matchers.not(
+                        org.hamcrest.Matchers.containsString("DECEMBER"))))
+                .andExpect(content().string(org.hamcrest.Matchers.not(
+                        org.hamcrest.Matchers.containsString("FEBRUARY"))));
+    }
+
+    @Test
     void visitsListPageRenders() throws Exception {
         mockMvc.perform(get("/visits"))
                 .andExpect(status().isOk())
