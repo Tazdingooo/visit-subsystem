@@ -42,11 +42,36 @@
                 <li th:each="e : ${#fields.errors('departmentName')}" th:text="${e}"></li>
             </ul>
 
-            <label class="field">Planned time
-                <input type="datetime-local" th:field="*{plannedAtLocal}">
-            </label>
-            <ul class="errors" th:if="${#fields.hasErrors('plannedAtLocal')}">
-                <li th:each="e : ${#fields.errors('plannedAtLocal')}" th:text="${e}"></li>
+            <div class="field-group">
+                <span class="group-label">Planned time</span>
+                <div class="time-row">
+                    <label class="field">Date
+                        <input type="date" th:field="*{plannedDate}">
+                    </label>
+                    <label class="field">Hour
+                        <select th:field="*{plannedHour}">
+                            <option th:each="h : ${#numbers.sequence(0, 23)}"
+                                    th:value="${h}"
+                                    th:text="${#numbers.formatInteger(h, 2)}">09</option>
+                        </select>
+                    </label>
+                    <label class="field">Minute
+                        <select th:field="*{plannedMinute}">
+                            <option th:each="m : ${#numbers.sequence(0, 59)}"
+                                    th:value="${m}"
+                                    th:text="${#numbers.formatInteger(m, 2)}">00</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <ul class="errors" th:if="${#fields.hasErrors('plannedDate')}">
+                <li th:each="e : ${#fields.errors('plannedDate')}" th:text="${e}"></li>
+            </ul>
+            <ul class="errors" th:if="${#fields.hasErrors('plannedHour')}">
+                <li th:each="e : ${#fields.errors('plannedHour')}" th:text="${e}"></li>
+            </ul>
+            <ul class="errors" th:if="${#fields.hasErrors('plannedMinute')}">
+                <li th:each="e : ${#fields.errors('plannedMinute')}" th:text="${e}"></li>
             </ul>
 
             <div class="actions">

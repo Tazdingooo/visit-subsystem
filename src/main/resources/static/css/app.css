@@ -222,3 +222,34 @@ button.secondary, .button.secondary {
 .inline-form label.field {
   width: 10rem;
 }
+
+.field-group {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field-group .group-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.time-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.time-row label.field {
+  gap: 0.25rem;
+}
+
+.time-row label.field:nth-child(1) {
+  flex: 1 1 12rem;
+  min-width: 10rem;
+}
+
+.time-row label.field:nth-child(2),
+.time-row label.field:nth-child(3) {
+  flex: 0 0 5.5rem;
+}

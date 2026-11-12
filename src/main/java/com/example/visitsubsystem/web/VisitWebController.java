@@ -17,10 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.DateTimeException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.function.Supplier;
 
 @Controller
@@ -50,7 +54,7 @@ public class VisitWebController {
     @GetMapping("/visits/new")
     public String newVisitForm(Model model) {
         if (!model.containsAttribute("form")) {
-            model.addAttribute("form", new PlanVisitForm());
+            model.addAttribute("form", defaultForm());
         }
         addPlanFormOptions(model);
         return "visits/new";
@@ -62,13 +66,16 @@ public class VisitWebController {
                               Model model,
                               RedirectAttributes redirectAttributes) {
         Instant plannedAt = null;
-        if (form.getPlannedAtLocal() != null && !form.getPlannedAtLocal().isBlank()) {
+        if (form.getPlannedDate() != null && !form.getPlannedDate().isBlank()
+                && form.getPlannedHour() != null && form.getPlannedMinute() != null) {
             try {
-                plannedAt = LocalDateTime.parse(form.getPlannedAtLocal())
-                        .atZone(zone)
-                        .toInstant();
+                LocalDateTime local = LocalDate.parse(form.getPlannedDate())
+                        .atTime(form.getPlannedHour(), form.getPlannedMinute());
+                plannedAt = local.atZone(zone).toInstant();
             } catch (DateTimeParseException ex) {
-                binding.rejectValue("plannedAtLocal", "invalid", "Enter a valid date and time");
+                binding.rejectValue("plannedDate", "invalid", "Enter a valid date");
+            } catch (DateTimeException ex) {
+                binding.rejectValue("plannedHour", "invalid", "Enter a valid hour and minute");
             }
         }
         if (binding.hasErrors()) {
@@ -152,5 +159,19 @@ public class VisitWebController {
     private void addPlanFormOptions(Model model) {
         model.addAttribute("hcps", hcpRepository.findAllByOrderByNameAsc());
         model.addAttribute("products", productRepository.findAll());
+    }
+
+    /**
+     * Seeds the fresh form with the next half-hour boundary in the app zone, so the
+     * date/hour/minute selects open on a sensible future slot instead of empty.
+     */
+    private PlanVisitForm defaultForm() {
+        ZonedDateTime now = ZonedDateTime.now(zone);
+        ZonedDateTime nextSlot = now.plusMinutes(30 - now.getMinute() % 30).truncatedTo(ChronoUnit.MINUTES);
+        PlanVisitForm form = new PlanVisitForm();
+        form.setPlannedDate(nextSlot.toLocalDate().toString());
+        form.setPlannedHour(nextSlot.getHour());
+        form.setPlannedMinute(nextSlot.getMinute());
+        return form;
     }
 }

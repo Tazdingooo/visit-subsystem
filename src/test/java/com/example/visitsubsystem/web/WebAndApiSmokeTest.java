@@ -106,10 +106,51 @@ class WebAndApiSmokeTest {
                         .param("hcpId", String.valueOf(hcp.getId()))
                         .param("productId", String.valueOf(product.getId()))
                         .param("departmentName", "Neurology")
-                        .param("plannedAtLocal", "2026-12-02T10:30"))
+                        .param("plannedDate", "2026-12-02")
+                        .param("plannedHour", "10")
+                        .param("plannedMinute", "30"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location",
                         org.hamcrest.Matchers.startsWith("/visits/")));
+    }
+
+    @Test
+    void plannedTimeIsComposedFromDateHourMinuteInAppZone() throws Exception {
+        // Asia/Shanghai is UTC+8, so 2026-12-02 10:30 local == 02:30Z.
+        mockMvc.perform(post("/visits")
+                        .param("hcpId", String.valueOf(hcp.getId()))
+                        .param("productId", String.valueOf(product.getId()))
+                        .param("departmentName", "Neurology")
+                        .param("plannedDate", "2026-12-02")
+                        .param("plannedHour", "10")
+                        .param("plannedMinute", "30"))
+                .andExpect(status().is3xxRedirection());
+
+        mockMvc.perform(get("/visits"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("2026-12-02 10:30")));
+    }
+
+    @Test
+    void planFormRendersHourAndMinuteSelects() throws Exception {
+        mockMvc.perform(get("/visits/new"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("type=\"date\"")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("<select id=\"plannedHour\"")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("<select id=\"plannedMinute\"")));
+    }
+
+    @Test
+    void formRejectsInvalidHour() throws Exception {
+        mockMvc.perform(post("/visits")
+                        .param("hcpId", String.valueOf(hcp.getId()))
+                        .param("productId", String.valueOf(product.getId()))
+                        .param("departmentName", "Neurology")
+                        .param("plannedDate", "2026-12-02")
+                        .param("plannedHour", "24")
+                        .param("plannedMinute", "0"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("visits/new"));
     }
 
     @Test
