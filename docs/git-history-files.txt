@@ -1,0 +1,118 @@
+=== ef12659 fix inconsistent month
+M	src/main/resources/templates/dashboard.html
+M	src/test/java/com/example/visitsubsystem/web/WebAndApiSmokeTest.java
+
+=== 7c52854 time selector UI
+M	src/main/java/com/example/visitsubsystem/web/PlanVisitForm.java
+M	src/main/java/com/example/visitsubsystem/web/VisitWebController.java
+M	src/main/resources/static/css/app.css
+M	src/main/resources/templates/visits/new.html
+M	src/test/java/com/example/visitsubsystem/web/WebAndApiSmokeTest.java
+
+=== c44dd43 zone id fix
+M	src/main/java/com/example/visitsubsystem/web/DashboardController.java
+
+=== e8870db time zone fix
+A	src/main/java/com/example/visitsubsystem/config/AppTimeZone.java
+M	src/main/java/com/example/visitsubsystem/service/DashboardService.java
+M	src/main/java/com/example/visitsubsystem/web/DisplayFormats.java
+M	src/main/java/com/example/visitsubsystem/web/VisitWebController.java
+M	src/main/java/com/example/visitsubsystem/web/WebConfig.java
+M	src/main/resources/application.yml
+M	src/test/java/com/example/visitsubsystem/service/DashboardServiceIntegrationTest.java
+
+=== b9fde7c docker
+A	.dockerignore
+A	Dockerfile
+A	docker-compose.yaml
+A	src/main/resources/application-docker.yml
+
+=== fc21a57 dashboard
+A	src/main/java/com/example/visitsubsystem/service/DashboardData.java
+A	src/main/java/com/example/visitsubsystem/service/DashboardService.java
+A	src/main/java/com/example/visitsubsystem/web/DashboardController.java
+D	src/main/resources/static/index.html
+A	src/main/resources/static/vendor/Chart.js-LICENSE.md
+A	src/main/resources/static/vendor/chart.umd.js
+A	src/main/resources/templates/dashboard.html
+A	src/test/java/com/example/visitsubsystem/service/DashboardServiceIntegrationTest.java
+A	src/test/java/com/example/visitsubsystem/web/WebAndApiSmokeTest.java
+
+=== 04ea722 pages, controller and api
+M	src/main/java/com/example/visitsubsystem/repository/HcpRepository.java
+A	src/main/java/com/example/visitsubsystem/repository/ProductCountRow.java
+A	src/main/java/com/example/visitsubsystem/repository/StatusCountRow.java
+M	src/main/java/com/example/visitsubsystem/repository/VisitRepository.java
+A	src/main/java/com/example/visitsubsystem/service/VisitDetail.java
+M	src/main/java/com/example/visitsubsystem/service/VisitService.java
+A	src/main/java/com/example/visitsubsystem/service/VisitSummary.java
+A	src/main/java/com/example/visitsubsystem/web/DisplayFormats.java
+A	src/main/java/com/example/visitsubsystem/web/GpsForm.java
+A	src/main/java/com/example/visitsubsystem/web/PlanVisitForm.java
+A	src/main/java/com/example/visitsubsystem/web/ReportForm.java
+A	src/main/java/com/example/visitsubsystem/web/VisitWebController.java
+A	src/main/java/com/example/visitsubsystem/web/WebConfig.java
+A	src/main/java/com/example/visitsubsystem/web/WebExceptionHandler.java
+A	src/main/java/com/example/visitsubsystem/web/api/ApiExceptionHandler.java
+A	src/main/java/com/example/visitsubsystem/web/api/GpsRequest.java
+A	src/main/java/com/example/visitsubsystem/web/api/HcpResponse.java
+A	src/main/java/com/example/visitsubsystem/web/api/PlanVisitRequest.java
+A	src/main/java/com/example/visitsubsystem/web/api/ProductResponse.java
+A	src/main/java/com/example/visitsubsystem/web/api/ReportRequest.java
+A	src/main/java/com/example/visitsubsystem/web/api/VisitApiController.java
+A	src/main/java/com/example/visitsubsystem/web/api/VisitResponse.java
+A	src/main/resources/static/css/app.css
+A	src/main/resources/templates/error/404.html
+A	src/main/resources/templates/fragments.html
+A	src/main/resources/templates/visits/detail.html
+A	src/main/resources/templates/visits/list.html
+A	src/main/resources/templates/visits/new.html
+
+=== 787f249 visit service
+A	src/main/java/com/example/visitsubsystem/config/ComplianceProperties.java
+A	src/main/java/com/example/visitsubsystem/geo/Haversine.java
+A	src/main/java/com/example/visitsubsystem/repository/CallReportRepository.java
+A	src/main/java/com/example/visitsubsystem/repository/HcpRepository.java
+A	src/main/java/com/example/visitsubsystem/repository/HospitalRepository.java
+A	src/main/java/com/example/visitsubsystem/repository/ProductRepository.java
+A	src/main/java/com/example/visitsubsystem/repository/VisitRepository.java
+A	src/main/java/com/example/visitsubsystem/service/ComplianceEvaluator.java
+A	src/main/java/com/example/visitsubsystem/service/ComplianceResult.java
+A	src/main/java/com/example/visitsubsystem/service/InconsistentVisitTimestampsException.java
+A	src/main/java/com/example/visitsubsystem/service/InvalidVisitTransitionException.java
+A	src/main/java/com/example/visitsubsystem/service/VisitNotFoundException.java
+A	src/main/java/com/example/visitsubsystem/service/VisitService.java
+A	src/test/java/com/example/visitsubsystem/config/CompliancePropertiesTest.java
+A	src/test/java/com/example/visitsubsystem/domain/AbnormalReasonSetConverterTest.java
+A	src/test/java/com/example/visitsubsystem/geo/HaversineTest.java
+A	src/test/java/com/example/visitsubsystem/service/ComplianceEvaluatorTest.java
+A	src/test/java/com/example/visitsubsystem/service/ComplianceResultTest.java
+A	src/test/java/com/example/visitsubsystem/service/VisitServiceIntegrationTest.java
+A	src/test/java/com/example/visitsubsystem/service/VisitServiceTest.java
+
+=== 5d4e142 visit service
+M	src/main/java/com/example/visitsubsystem/VisitSubsystemApplication.java
+M	src/main/java/com/example/visitsubsystem/domain/AbnormalReasonSetConverter.java
+M	src/main/resources/application.yml
+
+=== a569376 scaffolding and schema
+A	.gitignore
+A	.mvn/wrapper/maven-wrapper.properties
+A	mvnw
+A	mvnw.cmd
+A	pom.xml
+A	src/main/java/com/example/visitsubsystem/VisitSubsystemApplication.java
+A	src/main/java/com/example/visitsubsystem/domain/AbnormalReason.java
+A	src/main/java/com/example/visitsubsystem/domain/AbnormalReasonSetConverter.java
+A	src/main/java/com/example/visitsubsystem/domain/CallReport.java
+A	src/main/java/com/example/visitsubsystem/domain/ComplianceFlag.java
+A	src/main/java/com/example/visitsubsystem/domain/Hcp.java
+A	src/main/java/com/example/visitsubsystem/domain/Hospital.java
+A	src/main/java/com/example/visitsubsystem/domain/Product.java
+A	src/main/java/com/example/visitsubsystem/domain/Visit.java
+A	src/main/java/com/example/visitsubsystem/domain/VisitStatus.java
+A	src/main/resources/application.yml
+A	src/main/resources/db/migration/V1__schema.sql
+A	src/main/resources/db/migration/V2__seed_data.sql
+A	src/main/resources/static/index.html
+A	src/test/java/com/example/visitsubsystem/VisitSubsystemApplicationTests.java

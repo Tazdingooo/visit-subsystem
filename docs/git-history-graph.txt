@@ -1,0 +1,10 @@
+* ef12659 (HEAD -> sijie/visit-subsystem-scaffolding, tag: fix-month-nav, origin/sijie/visit-subsystem-scaffolding) fix inconsistent month
+* 7c52854 (tag: ux-time-selector) time selector UI
+* c44dd43 (tag: fix-timezone) zone id fix
+* e8870db time zone fix
+* b9fde7c (tag: phase-6-docker) docker
+* fc21a57 (tag: phase-5-dashboard) dashboard
+* 04ea722 (tag: phase-4-web-api) pages, controller and api
+* 787f249 (tag: phase-3-visit-service) visit service
+* 5d4e142 visit service
+* a569376 (tag: phase-1-2-scaffold-schema) scaffolding and schema

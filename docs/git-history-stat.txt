@@ -1,0 +1,128 @@
+a569376 2026-11-11 scaffolding and schema
+ .gitignore                                         |   6 +
+ .mvn/wrapper/maven-wrapper.properties              |   1 +
+ mvnw                                               | 295 +++++++++++++++++++++
+ mvnw.cmd                                           | 189 +++++++++++++
+ pom.xml                                            |  66 +++++
+ .../visitsubsystem/VisitSubsystemApplication.java  |  12 +
+ .../visitsubsystem/domain/AbnormalReason.java      |   6 +
+ .../domain/AbnormalReasonSetConverter.java         |  43 +++
+ .../example/visitsubsystem/domain/CallReport.java  |  76 ++++++
+ .../visitsubsystem/domain/ComplianceFlag.java      |   6 +
+ .../com/example/visitsubsystem/domain/Hcp.java     |  57 ++++
+ .../example/visitsubsystem/domain/Hospital.java    |  61 +++++
+ .../com/example/visitsubsystem/domain/Product.java |  41 +++
+ .../com/example/visitsubsystem/domain/Visit.java   | 197 ++++++++++++++
+ .../example/visitsubsystem/domain/VisitStatus.java |   8 +
+ src/main/resources/application.yml                 |  21 ++
+ src/main/resources/db/migration/V1__schema.sql     |  52 ++++
+ src/main/resources/db/migration/V2__seed_data.sql  |  17 ++
+ src/main/resources/static/index.html               |  11 +
+ .../VisitSubsystemApplicationTests.java            |  12 +
+ 20 files changed, 1177 insertions(+)
+
+5d4e142 2026-11-11 visit service
+ .../com/example/visitsubsystem/VisitSubsystemApplication.java  | 10 ++++++++++
+ .../visitsubsystem/domain/AbnormalReasonSetConverter.java      | 10 ++++++++--
+ src/main/resources/application.yml                             |  5 +++++
+ 3 files changed, 23 insertions(+), 2 deletions(-)
+
+787f249 2026-11-11 visit service
+ .../config/ComplianceProperties.java               |  22 +++
+ .../com/example/visitsubsystem/geo/Haversine.java  |  49 +++++
+ .../repository/CallReportRepository.java           |  13 ++
+ .../visitsubsystem/repository/HcpRepository.java   |   7 +
+ .../repository/HospitalRepository.java             |   7 +
+ .../repository/ProductRepository.java              |   7 +
+ .../visitsubsystem/repository/VisitRepository.java |   7 +
+ .../service/ComplianceEvaluator.java               |  38 ++++
+ .../visitsubsystem/service/ComplianceResult.java   |  23 +++
+ .../InconsistentVisitTimestampsException.java      |  13 ++
+ .../service/InvalidVisitTransitionException.java   |   8 +
+ .../service/VisitNotFoundException.java            |   8 +
+ .../visitsubsystem/service/VisitService.java       | 147 ++++++++++++++
+ .../config/CompliancePropertiesTest.java           |  63 ++++++
+ .../domain/AbnormalReasonSetConverterTest.java     |  46 +++++
+ .../example/visitsubsystem/geo/HaversineTest.java  |  53 +++++
+ .../service/ComplianceEvaluatorTest.java           |  63 ++++++
+ .../service/ComplianceResultTest.java              |  27 +++
+ .../service/VisitServiceIntegrationTest.java       | 216 +++++++++++++++++++++
+ .../visitsubsystem/service/VisitServiceTest.java   | 155 +++++++++++++++
+ 20 files changed, 972 insertions(+)
+
+04ea722 2026-11-11 pages, controller and api
+ .../visitsubsystem/repository/HcpRepository.java   |   6 +
+ .../visitsubsystem/repository/ProductCountRow.java |   7 +
+ .../visitsubsystem/repository/StatusCountRow.java  |   9 +
+ .../visitsubsystem/repository/VisitRepository.java |  41 ++++
+ .../visitsubsystem/service/VisitDetail.java        |  33 +++
+ .../visitsubsystem/service/VisitService.java       |  49 +++++
+ .../visitsubsystem/service/VisitSummary.java       |  17 ++
+ .../example/visitsubsystem/web/DisplayFormats.java |  50 +++++
+ .../com/example/visitsubsystem/web/GpsForm.java    |  31 +++
+ .../example/visitsubsystem/web/PlanVisitForm.java  |  58 ++++++
+ .../com/example/visitsubsystem/web/ReportForm.java |  32 +++
+ .../visitsubsystem/web/VisitWebController.java     | 153 ++++++++++++++
+ .../com/example/visitsubsystem/web/WebConfig.java  |  13 ++
+ .../visitsubsystem/web/WebExceptionHandler.java    |  20 ++
+ .../web/api/ApiExceptionHandler.java               |  63 ++++++
+ .../example/visitsubsystem/web/api/GpsRequest.java |   6 +
+ .../visitsubsystem/web/api/HcpResponse.java        |  11 +
+ .../visitsubsystem/web/api/PlanVisitRequest.java   |  14 ++
+ .../visitsubsystem/web/api/ProductResponse.java    |   4 +
+ .../visitsubsystem/web/api/ReportRequest.java      |   4 +
+ .../visitsubsystem/web/api/VisitApiController.java |  82 ++++++++
+ .../visitsubsystem/web/api/VisitResponse.java      |  52 +++++
+ src/main/resources/static/css/app.css              | 224 +++++++++++++++++++++
+ src/main/resources/templates/error/404.html        |  15 ++
+ src/main/resources/templates/fragments.html        |  26 +++
+ src/main/resources/templates/visits/detail.html    | 117 +++++++++++
+ src/main/resources/templates/visits/list.html      |  55 +++++
+ src/main/resources/templates/visits/new.html       |  60 ++++++
+ 28 files changed, 1252 insertions(+)
+
+fc21a57 2026-11-11 dashboard
+ .../visitsubsystem/service/DashboardData.java      |  20 +++
+ .../visitsubsystem/service/DashboardService.java   |  47 ++++++
+ .../visitsubsystem/web/DashboardController.java    |  41 +++++
+ src/main/resources/static/index.html               |  11 --
+ .../resources/static/vendor/Chart.js-LICENSE.md    |   9 +
+ src/main/resources/static/vendor/chart.umd.js      |  14 ++
+ src/main/resources/templates/dashboard.html        |  93 ++++++++++
+ .../service/DashboardServiceIntegrationTest.java   |  99 +++++++++++
+ .../visitsubsystem/web/WebAndApiSmokeTest.java     | 188 +++++++++++++++++++++
+ 9 files changed, 511 insertions(+), 11 deletions(-)
+
+b9fde7c 2026-11-11 docker
+ .dockerignore                             |  9 +++++++++
+ Dockerfile                                | 28 ++++++++++++++++++++++++++++
+ docker-compose.yaml                       | 19 +++++++++++++++++++
+ src/main/resources/application-docker.yml |  9 +++++++++
+ 4 files changed, 65 insertions(+)
+
+e8870db 2026-11-11 time zone fix
+ .../example/visitsubsystem/config/AppTimeZone.java | 23 ++++++++++++++++++++++
+ .../visitsubsystem/service/DashboardService.java   |  5 +++--
+ .../example/visitsubsystem/web/DisplayFormats.java | 19 ++++++++++--------
+ .../visitsubsystem/web/VisitWebController.java     |  7 +++++--
+ .../com/example/visitsubsystem/web/WebConfig.java  |  6 ++++--
+ src/main/resources/application.yml                 |  2 ++
+ .../service/DashboardServiceIntegrationTest.java   |  2 +-
+ 7 files changed, 49 insertions(+), 15 deletions(-)
+
+c44dd43 2026-11-11 zone id fix
+ .../com/example/visitsubsystem/web/DashboardController.java    | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+7c52854 2026-11-12 time selector UI
+ .../example/visitsubsystem/web/PlanVisitForm.java  | 48 ++++++++++++++++++----
+ .../visitsubsystem/web/VisitWebController.java     | 33 ++++++++++++---
+ src/main/resources/static/css/app.css              | 31 ++++++++++++++
+ src/main/resources/templates/visits/new.html       | 35 +++++++++++++---
+ .../visitsubsystem/web/WebAndApiSmokeTest.java     | 43 ++++++++++++++++++-
+ 5 files changed, 169 insertions(+), 21 deletions(-)
+
+ef12659 2026-11-12 fix inconsistent month
+ src/main/resources/templates/dashboard.html               |  4 ++--
+ .../example/visitsubsystem/web/WebAndApiSmokeTest.java    | 15 +++++++++++++++
+ 2 files changed, 17 insertions(+), 2 deletions(-)
